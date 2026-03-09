@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">🚌</span>
+      BusRoute
+    </a>
+    <nav class="nav">
+      <a href="/"            class="active">Dashboard</a>
+      <a href="/buses">Buses</a>
+      <a href="/passengers">Passengers</a>
+      <a href="/bookings">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+
+  <div class="hero">
+    <p class="hero-label">// Operations Dashboard</p>
+    <h1>Bus Ticket <span>Booking</span><br>Management</h1>
+    <p>Manage your fleet, passengers, and reservations from one place.</p>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="grid-3" style="margin-bottom: 32px;">
+    <div class="stat-card">
+      <p class="stat-label">Total Buses</p>
+      <p class="stat-value accent" th:text="${totalBuses}">0</p>
+      <p class="stat-sub" th:text="${activeBuses} + ' active'">0 active</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Passengers</p>
+      <p class="stat-value" th:text="${totalPassengers}">0</p>
+      <p class="stat-sub">registered</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Confirmed Bookings</p>
+      <p class="stat-value green" th:text="${confirmedBookings}">0</p>
+      <p class="stat-sub" th:text="${cancelledBookings} + ' cancelled'">0 cancelled</p>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="grid-2" style="margin-bottom: 32px;">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🚍 Quick: Add Bus</span>
+      </div>
+      <form method="post" action="/buses/add">
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="qBusName">Bus Name</label>
+              <input type="text" id="qBusName" name="busName" placeholder="e.g. Royal Travels" required/>
+            </div>
+            <div class="form-group">
+              <label for="qBusNumber">Bus Number</label>
+              <input type="text" id="qBusNumber" name="busNumber" placeholder="TN01AB1234" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="qSource">From</label>
+              <input type="text" id="qSource" name="source" placeholder="Chennai" required/>
+            </div>
+            <div class="form-group">
+              <label for="qDest">To</label>
+              <input type="text" id="qDest" name="destination" placeholder="Bangalore" required/>
+            </div>
+          </div>
+          <div class="form-row triple">
+            <div class="form-group">
+              <label for="qSeats">Seats</label>
+              <input type="number" id="qSeats" name="totalSeats" placeholder="40" min="1" required/>
+            </div>
+            <div class="form-group">
+              <label for="qPrice">Price (₹)</label>
+              <input type="number" id="qPrice" name="ticketPrice" placeholder="450" min="0" step="0.01" required/>
+            </div>
+            <div class="form-group">
+              <label for="qDep">Departure</label>
+              <input type="text" id="qDep" name="departureTime" placeholder="08:00 AM" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="qArr">Arrival</label>
+              <input type="text" id="qArr" name="arrivalTime" placeholder="02:00 PM" required/>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group" style="margin-top:0; padding-top:16px;">
+          <button type="submit" class="btn btn-primary">Add Bus</button>
+          <a href="/buses" class="btn btn-secondary">View All</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">👤 Quick: Register Passenger</span>
+      </div>
+      <form method="post" action="/passengers/add">
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="qName">Full Name</label>
+              <input type="text" id="qName" name="passengerName" placeholder="Ravi Kumar" required/>
+            </div>
+            <div class="form-group">
+              <label for="qEmail">Email</label>
+              <input type="email" id="qEmail" name="email" placeholder="ravi@example.com" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="qPhone">Phone</label>
+              <input type="text" id="qPhone" name="phoneNumber" placeholder="9876543210" required/>
+            </div>
+            <div class="form-group">
+              <label for="qAge">Age</label>
+              <input type="text" id="qAge" name="age" placeholder="28" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="qGender">Gender</label>
+              <select id="qGender" name="gender" required>
+                <option value="">-- Select --</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="qAddr">Address</label>
+              <input type="text" id="qAddr" name="address" placeholder="Anna Nagar, Chennai" required/>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group" style="margin-top:0; padding-top:16px;">
+          <button type="submit" class="btn btn-primary">Register</button>
+          <a href="/passengers" class="btn btn-secondary">View All</a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Recent Bookings preview -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">🎫 Recent Bookings</span>
+      <a href="/bookings" class="btn btn-secondary btn-sm">View All</a>
+    </div>
+    <div class="table-wrap" th:if="${recentBookings != null and !recentBookings.isEmpty()}">
+      <table>
+        <thead>
+          <tr>
+            <th>PNR</th>
+            <th>Passenger</th>
+            <th>Route</th>
+            <th>Seats</th>
+            <th>Fare</th>
+            <th>Journey Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="b : ${recentBookings}">
+            <td class="td-mono" th:text="${b.pnrNumber}">—</td>
+            <td th:text="${b.passenger.passengerName}">—</td>
+            <td>
+              <span class="route-display">
+                <span th:text="${b.bus.source}">—</span>
+                <span class="route-arrow">→</span>
+                <span th:text="${b.bus.destination}">—</span>
+              </span>
+            </td>
+            <td class="td-mono" th:text="${b.numberOfSeats}">—</td>
+            <td class="td-mono" th:text="'₹' + ${b.totalFare}">—</td>
+            <td th:text="${b.journeyDate}">—</td>
+            <td>
+              <span th:class="${b.bookingStatus == 'CONFIRMED'} ? 'card-badge badge-confirm' : 'card-badge badge-cancel'"
+                    th:text="${b.bookingStatus}">—</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="empty-state" th:if="${recentBookings == null or recentBookings.isEmpty()}">
+      <div class="icon">🎫</div>
+      <p>No bookings yet. <a href="/bookings/new" style="color:var(--accent)">Create one →</a></p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

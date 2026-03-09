@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${pageTitle} + ' — BusRoute'">BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">🚌</span>
+      BusRoute
+    </a>
+    <nav class="nav">
+      <a th:href="@{/}" th:classappend="${activePage=='home'   ? 'active' : ''}">Dashboard</a>
+      <a th:href="@{/buses}" th:classappend="${activePage=='buses'  ? 'active' : ''}">Buses</a>
+      <a th:href="@{/passengers}" th:classappend="${activePage=='passengers' ? 'active' : ''}">Passengers</a>
+      <a th:href="@{/bookings}" th:classappend="${activePage=='bookings' ? 'active' : ''}">Bookings</a>
+      <a th:href="@{/search}" th:classappend="${activePage=='search'  ? 'active' : ''}">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <!-- Page content injected here -->
+  <div th:replace="${content}"></div>
+</div>
+
+</body>
+</html>

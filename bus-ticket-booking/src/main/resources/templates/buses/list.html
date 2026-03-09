@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buses — BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🚌</span>BusRoute</a>
+    <nav class="nav">
+      <a href="/">Dashboard</a>
+      <a href="/buses" class="active">Buses</a>
+      <a href="/passengers">Passengers</a>
+      <a href="/bookings">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">
+    <p class="breadcrumb"><a href="/">Home</a> / Buses</p>
+    <h2>Fleet Management</h2>
+  </div>
+
+  <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+  <div th:if="${error}"   class="alert alert-error"   th:text="${error}"></div>
+
+  <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="/buses/new" class="btn btn-primary">+ Add New Bus</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Bus Name</th>
+          <th>Bus Number</th>
+          <th>Route</th>
+          <th>Departure</th>
+          <th>Arrival</th>
+          <th>Seats</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="bus : ${buses}">
+          <td class="muted" th:text="${bus.busId}">—</td>
+          <td style="font-weight:600;" th:text="${bus.busName}">—</td>
+          <td class="td-mono" th:text="${bus.busNumber}">—</td>
+          <td>
+            <span class="route-display">
+              <span th:text="${bus.source}">—</span>
+              <span class="route-arrow">→</span>
+              <span th:text="${bus.destination}">—</span>
+            </span>
+          </td>
+          <td class="td-mono" th:text="${bus.departureTime}">—</td>
+          <td class="td-mono" th:text="${bus.arrivalTime}">—</td>
+          <td>
+            <div class="seat-meter">
+              <div class="seat-meter-track">
+                <div class="seat-meter-fill"
+                     th:classappend="${bus.availableSeats == 0} ? ' full' : (${bus.availableSeats <= bus.totalSeats / 4} ? ' warn' : '')"
+                     th:style="'width:' + (${bus.availableSeats} * 100 / ${bus.totalSeats}) + '%'"></div>
+              </div>
+              <span class="seat-meter-text"
+                    th:text="${bus.availableSeats} + '/' + ${bus.totalSeats} + ' avail'">—</span>
+            </div>
+          </td>
+          <td class="td-mono" th:text="'₹' + ${bus.ticketPrice}">—</td>
+          <td>
+            <span th:class="${bus.status == 'ACTIVE'} ? 'card-badge badge-active' : 'card-badge badge-inactive'"
+                  th:text="${bus.status}">—</span>
+          </td>
+          <td>
+            <div style="display:flex;gap:6px;">
+              <a th:href="@{'/buses/' + ${bus.busId}}" class="btn btn-secondary btn-sm">View</a>
+              <a th:href="@{'/buses/' + ${bus.busId} + '/edit'}" class="btn btn-secondary btn-sm">Edit</a>
+              <form th:action="@{'/buses/' + ${bus.busId} + '/delete'}" method="post" style="margin:0;">
+                <button type="submit" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Deactivate this bus?')">Del</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" th:if="${buses == null or buses.isEmpty()}">
+    <div class="icon">🚌</div>
+    <p>No buses found. <a href="/buses/new" style="color:var(--accent)">Add one →</a></p>
+  </div>
+</div>
+</body>
+</html>

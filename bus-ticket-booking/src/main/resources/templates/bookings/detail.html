@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking Confirmed — BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <style>
+    .confirm-banner {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+    .confirm-banner .tick {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .confirm-banner h3 {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+    .confirm-banner p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🚌</span>BusRoute</a>
+    <nav class="nav">
+      <a href="/">Dashboard</a>
+      <a href="/buses">Buses</a>
+      <a href="/passengers">Passengers</a>
+      <a href="/bookings" class="active">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">
+    <p class="breadcrumb"><a href="/">Home</a> / <a href="/bookings">Bookings</a> / Confirmation</p>
+    <h2>Booking Confirmation</h2>
+  </div>
+
+  <div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+
+      <div class="confirm-banner" th:if="${booking.bookingStatus == 'CONFIRMED'}">
+        <span class="tick">✅</span>
+        <h3>Booking Confirmed!</h3>
+        <p>Your ticket has been successfully booked.</p>
+      </div>
+
+      <div class="confirm-banner" th:if="${booking.bookingStatus == 'CANCELLED'}">
+        <span class="tick">❌</span>
+        <h3 style="color:var(--red);">Booking Cancelled</h3>
+        <p>This booking has been cancelled and seats restored.</p>
+      </div>
+
+      <!-- PNR Number -->
+      <div class="pnr-box">
+        <div>
+          <p class="pnr-label">PNR Number</p>
+          <p class="pnr-value" th:text="${booking.pnrNumber}">—</p>
+        </div>
+        <span th:class="${booking.bookingStatus == 'CONFIRMED'} ? 'card-badge badge-confirm' : 'card-badge badge-cancel'"
+              th:text="${booking.bookingStatus}">—</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Journey Details -->
+      <div style="margin-bottom:20px;">
+        <p class="form-section-title">Journey Details</p>
+        <div style="display:flex; align-items:center; gap:16px; margin:16px 0; padding:16px; background:var(--bg-panel); border-radius:var(--radius);">
+          <div>
+            <p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);">FROM</p>
+            <p style="font-family:var(--font-head);font-size:18px;font-weight:800;" th:text="${booking.bus.source}">—</p>
+            <p style="font-size:11px;color:var(--text-muted);" th:text="${booking.bus.departureTime}">—</p>
+          </div>
+          <div style="flex:1;text-align:center;color:var(--accent);font-size:20px;">→</div>
+          <div style="text-align:right;">
+            <p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);">TO</p>
+            <p style="font-family:var(--font-head);font-size:18px;font-weight:800;" th:text="${booking.bus.destination}">—</p>
+            <p style="font-size:11px;color:var(--text-muted);" th:text="${booking.bus.arrivalTime}">—</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <p class="form-section-title">Passenger</p>
+          <div class="data-list">
+            <div class="data-row">
+              <span class="data-key">Name</span>
+              <span class="data-val" th:text="${booking.passenger.passengerName}">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-key">Phone</span>
+              <span class="data-val td-mono" th:text="${booking.passenger.phoneNumber}">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-key">Email</span>
+              <span class="data-val" style="font-size:11px;" th:text="${booking.passenger.email}">—</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="form-section-title">Ticket Info</p>
+          <div class="data-list">
+            <div class="data-row">
+              <span class="data-key">Bus</span>
+              <span class="data-val" th:text="${booking.bus.busName}">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-key">Journey Date</span>
+              <span class="data-val td-mono" th:text="${booking.journeyDate}">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-key">Seats</span>
+              <span class="data-val td-mono" th:text="${booking.numberOfSeats}">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-key">Total Fare</span>
+              <span class="data-val highlight" th:text="'₹' + ${booking.totalFare}">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <a href="/bookings" class="btn btn-secondary">All Bookings</a>
+        <form th:if="${booking.bookingStatus == 'CONFIRMED'}"
+              th:action="@{'/bookings/' + ${booking.bookingId} + '/cancel'}" method="post" style="margin:0;">
+          <button type="submit" class="btn btn-danger"
+                  onclick="return confirm('Cancel this booking?')">Cancel Booking</button>
+        </form>
+        <a href="/bookings/new" class="btn btn-primary">Book Another</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

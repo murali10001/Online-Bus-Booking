@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Passengers — BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🚌</span>BusRoute</a>
+    <nav class="nav">
+      <a href="/">Dashboard</a>
+      <a href="/buses">Buses</a>
+      <a href="/passengers" class="active">Passengers</a>
+      <a href="/bookings">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">
+    <p class="breadcrumb"><a href="/">Home</a> / Passengers</p>
+    <h2>Passenger Registry</h2>
+  </div>
+
+  <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+  <div th:if="${error}"   class="alert alert-error"   th:text="${error}"></div>
+
+  <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="/passengers/new" class="btn btn-primary">+ Register Passenger</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Address</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="p : ${passengers}">
+          <td class="muted" th:text="${p.passengerId}">—</td>
+          <td style="font-weight:600;" th:text="${p.passengerName}">—</td>
+          <td class="td-mono" th:text="${p.email}">—</td>
+          <td class="td-mono" th:text="${p.phoneNumber}">—</td>
+          <td th:text="${p.age}">—</td>
+          <td th:text="${p.gender}">—</td>
+          <td class="muted" th:text="${p.address}">—</td>
+          <td>
+            <div style="display:flex;gap:6px;">
+              <a th:href="@{'/passengers/' + ${p.passengerId}}" class="btn btn-secondary btn-sm">View</a>
+              <a th:href="@{'/passengers/' + ${p.passengerId} + '/edit'}" class="btn btn-secondary btn-sm">Edit</a>
+              <form th:action="@{'/passengers/' + ${p.passengerId} + '/delete'}" method="post" style="margin:0;">
+                <button type="submit" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this passenger?')">Del</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" th:if="${passengers == null or passengers.isEmpty()}">
+    <div class="icon">👤</div>
+    <p>No passengers registered. <a href="/passengers/new" style="color:var(--accent)">Register one →</a></p>
+  </div>
+</div>
+</body>
+</html>

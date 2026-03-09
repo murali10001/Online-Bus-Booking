@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>New Booking — BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🚌</span>BusRoute</a>
+    <nav class="nav">
+      <a href="/">Dashboard</a>
+      <a href="/buses">Buses</a>
+      <a href="/passengers">Passengers</a>
+      <a href="/bookings" class="active">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">
+    <p class="breadcrumb"><a href="/">Home</a> / <a href="/bookings">Bookings</a> / New</p>
+    <h2>Book a Ticket</h2>
+  </div>
+
+  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+  <div style="max-width: 680px;">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Booking Details</span>
+        <span class="card-badge badge-confirm">New</span>
+      </div>
+
+      <!--
+        Parameters received via @RequestParam in controller:
+        busId, passengerId, numberOfSeats, journeyDate
+      -->
+      <form method="post" action="/bookings/book">
+        <div class="form-section">
+          <p class="form-section-title">Select Bus</p>
+          <div class="form-group">
+            <label for="busId">Bus</label>
+            <select id="busId" name="busId" required>
+              <option value="">-- Select a Bus --</option>
+              <option th:each="bus : ${buses}"
+                      th:value="${bus.busId}"
+                      th:selected="${preselectedBusId != null and bus.busId == preselectedBusId}"
+                      th:text="${bus.busName} + ' (' + ${bus.busNumber} + ') — ' + ${bus.source} + ' → ' + ${bus.destination} + ' | ₹' + ${bus.ticketPrice} + ' | ' + ${bus.availableSeats} + ' seats left'">
+              </option>
+            </select>
+            <span class="field-hint">Only active buses with available seats shown.</span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-title">Select Passenger</p>
+          <div class="form-group">
+            <label for="passengerId">Passenger</label>
+            <select id="passengerId" name="passengerId" required>
+              <option value="">-- Select a Passenger --</option>
+              <option th:each="p : ${passengers}"
+                      th:value="${p.passengerId}"
+                      th:text="${p.passengerName} + ' (' + ${p.email} + ')'">
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-title">Trip Info</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="numberOfSeats">Number of Seats</label>
+              <input type="number" id="numberOfSeats" name="numberOfSeats"
+                     value="1" min="1" max="10" required/>
+            </div>
+            <div class="form-group">
+              <label for="journeyDate">Journey Date</label>
+              <input type="date" id="journeyDate" name="journeyDate" required/>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">Confirm Booking</button>
+          <a href="/bookings" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${passenger.passengerName} + ' — BusRoute'">Passenger</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🚌</span>BusRoute</a>
+    <nav class="nav">
+      <a href="/">Dashboard</a>
+      <a href="/buses">Buses</a>
+      <a href="/passengers" class="active">Passengers</a>
+      <a href="/bookings">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">
+    <p class="breadcrumb"><a href="/">Home</a> / <a href="/passengers">Passengers</a> / <span th:text="${passenger.passengerName}">—</span></p>
+    <h2 th:text="${passenger.passengerName}">Passenger Detail</h2>
+  </div>
+
+  <div class="layout-sidebar">
+    <div class="sidebar">
+      <div class="sidebar-header"><p class="sidebar-title">Profile</p></div>
+      <div style="padding:20px;">
+        <div style="text-align:center; margin-bottom:20px;">
+          <div style="width:60px;height:60px;border-radius:50%;background:var(--accent-glow);border:2px solid var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px;">👤</div>
+          <p style="font-family:var(--font-head);font-weight:700;font-size:16px;" th:text="${passenger.passengerName}">—</p>
+          <p style="font-size:12px;color:var(--text-muted);" th:text="${passenger.gender} + ', ' + ${passenger.age} + ' yrs'">—</p>
+        </div>
+        <div class="data-list">
+          <div class="data-row">
+            <span class="data-key">ID</span>
+            <span class="data-val td-mono" th:text="${passenger.passengerId}">—</span>
+          </div>
+          <div class="divider"></div>
+          <div class="data-row">
+            <span class="data-key">Email</span>
+            <span class="data-val" style="font-size:11px;word-break:break-all;" th:text="${passenger.email}">—</span>
+          </div>
+          <div class="divider"></div>
+          <div class="data-row">
+            <span class="data-key">Phone</span>
+            <span class="data-val td-mono" th:text="${passenger.phoneNumber}">—</span>
+          </div>
+          <div class="divider"></div>
+          <div class="data-row">
+            <span class="data-key">Address</span>
+            <span class="data-val" style="font-size:11px;text-align:right;" th:text="${passenger.address}">—</span>
+          </div>
+        </div>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
+          <a th:href="@{'/passengers/' + ${passenger.passengerId} + '/edit'}" class="btn btn-secondary btn-full">Edit</a>
+          <form th:action="@{'/passengers/' + ${passenger.passengerId} + '/delete'}" method="post">
+            <button type="submit" class="btn btn-danger btn-full"
+                    onclick="return confirm('Delete this passenger?')">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Booking History</span>
+          <a href="/bookings/new" class="btn btn-primary btn-sm">+ New Booking</a>
+        </div>
+        <div class="table-wrap" th:if="${bookings != null and !bookings.isEmpty()}">
+          <table>
+            <thead>
+              <tr>
+                <th>PNR</th>
+                <th>Route</th>
+                <th>Seats</th>
+                <th>Fare</th>
+                <th>Journey Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="b : ${bookings}">
+                <td class="td-mono" th:text="${b.pnrNumber}">—</td>
+                <td>
+                  <span class="route-display">
+                    <span th:text="${b.bus.source}">—</span>
+                    <span class="route-arrow">→</span>
+                    <span th:text="${b.bus.destination}">—</span>
+                  </span>
+                </td>
+                <td th:text="${b.numberOfSeats}">—</td>
+                <td class="td-mono" th:text="'₹' + ${b.totalFare}">—</td>
+                <td th:text="${b.journeyDate}">—</td>
+                <td>
+                  <span th:class="${b.bookingStatus == 'CONFIRMED'} ? 'card-badge badge-confirm' : 'card-badge badge-cancel'"
+                        th:text="${b.bookingStatus}">—</span>
+                </td>
+                <td>
+                  <form th:if="${b.bookingStatus == 'CONFIRMED'}"
+                        th:action="@{'/bookings/' + ${b.bookingId} + '/cancel'}" method="post" style="margin:0;">
+                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="empty-state" th:if="${bookings == null or bookings.isEmpty()}">
+          <div class="icon">🎫</div>
+          <p>No bookings yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

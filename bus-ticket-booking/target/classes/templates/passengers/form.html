@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${passenger.passengerId == null} ? 'Register Passenger' : 'Edit Passenger'"> — BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🚌</span>BusRoute</a>
+    <nav class="nav">
+      <a href="/">Dashboard</a>
+      <a href="/buses">Buses</a>
+      <a href="/passengers" class="active">Passengers</a>
+      <a href="/bookings">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">
+    <p class="breadcrumb">
+      <a href="/">Home</a> / <a href="/passengers">Passengers</a> /
+      <span th:text="${passenger.passengerId == null} ? 'Register' : 'Edit'">Form</span>
+    </p>
+    <h2 th:text="${passenger.passengerId == null} ? 'Register Passenger' : 'Edit Passenger'">Form</h2>
+  </div>
+
+  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+  <div style="max-width: 680px;">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Passenger Details</span>
+      </div>
+
+      <form th:action="${passenger.passengerId == null} ? '/passengers/add' : '/passengers/' + ${passenger.passengerId} + '/update'"
+            method="post"
+            th:object="${passenger}">
+
+        <div class="form-section">
+          <p class="form-section-title">Personal Info</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="passengerName">Full Name</label>
+              <input type="text" id="passengerName" name="passengerName"
+                     th:value="*{passengerName}" placeholder="Ravi Kumar" required/>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email"
+                     th:value="*{email}" placeholder="ravi@example.com" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phoneNumber">Phone Number</label>
+              <input type="text" id="phoneNumber" name="phoneNumber"
+                     th:value="*{phoneNumber}" placeholder="9876543210" required/>
+              <span class="field-hint">10 digits</span>
+            </div>
+            <div class="form-group">
+              <label for="age">Age</label>
+              <input type="text" id="age" name="age"
+                     th:value="*{age}" placeholder="28" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender" required>
+                <option value="">-- Select --</option>
+                <option th:selected="${passenger.gender == 'Male'}">Male</option>
+                <option th:selected="${passenger.gender == 'Female'}">Female</option>
+                <option th:selected="${passenger.gender == 'Other'}">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input type="text" id="address" name="address"
+                     th:value="*{address}" placeholder="Anna Nagar, Chennai" required/>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary"
+                  th:text="${passenger.passengerId == null} ? 'Register' : 'Update'">Save</button>
+          <a href="/passengers" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

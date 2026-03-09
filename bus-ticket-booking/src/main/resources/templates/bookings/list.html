@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bookings — BusRoute</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🚌</span>BusRoute</a>
+    <nav class="nav">
+      <a href="/">Dashboard</a>
+      <a href="/buses">Buses</a>
+      <a href="/passengers">Passengers</a>
+      <a href="/bookings" class="active">Bookings</a>
+      <a href="/search">Search</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">
+    <p class="breadcrumb"><a href="/">Home</a> / Bookings</p>
+    <h2>All Bookings</h2>
+  </div>
+
+  <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+  <div th:if="${error}"   class="alert alert-error"   th:text="${error}"></div>
+
+  <!-- PNR Search -->
+  <div class="search-bar" style="margin-bottom:20px;">
+    <form method="get" action="/bookings/pnr-search">
+      <div class="form-group">
+        <label for="pnr">Search by PNR</label>
+        <input type="text" id="pnr" name="pnr" placeholder="PNR1734567890123"/>
+      </div>
+      <button type="submit" class="btn btn-secondary" style="margin-top:22px;">Search</button>
+    </form>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="/bookings/new" class="btn btn-primary">+ New Booking</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>PNR</th>
+          <th>Passenger</th>
+          <th>Bus</th>
+          <th>Route</th>
+          <th>Seats</th>
+          <th>Fare</th>
+          <th>Journey Date</th>
+          <th>Booked On</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="b : ${bookings}">
+          <td class="muted" th:text="${b.bookingId}">—</td>
+          <td class="td-mono" style="color:var(--accent);" th:text="${b.pnrNumber}">—</td>
+          <td th:text="${b.passenger.passengerName}">—</td>
+          <td th:text="${b.bus.busName}">—</td>
+          <td>
+            <span class="route-display">
+              <span th:text="${b.bus.source}">—</span>
+              <span class="route-arrow">→</span>
+              <span th:text="${b.bus.destination}">—</span>
+            </span>
+          </td>
+          <td th:text="${b.numberOfSeats}">—</td>
+          <td class="td-mono" th:text="'₹' + ${b.totalFare}">—</td>
+          <td th:text="${b.journeyDate}">—</td>
+          <td class="muted td-mono" th:text="${#temporals.format(b.bookingDate,'dd-MM-yy HH:mm')}">—</td>
+          <td>
+            <span th:class="${b.bookingStatus == 'CONFIRMED'} ? 'card-badge badge-confirm' : 'card-badge badge-cancel'"
+                  th:text="${b.bookingStatus}">—</span>
+          </td>
+          <td>
+            <form th:if="${b.bookingStatus == 'CONFIRMED'}"
+                  th:action="@{'/bookings/' + ${b.bookingId} + '/cancel'}" method="post" style="margin:0;">
+              <button type="submit" class="btn btn-danger btn-sm"
+                      onclick="return confirm('Cancel booking ' + this.form.action.split('/')[2] + '?')">Cancel</button>
+            </form>
+            <span th:if="${b.bookingStatus != 'CONFIRMED'}" style="color:var(--text-faint);font-size:11px;">—</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" th:if="${bookings == null or bookings.isEmpty()}">
+    <div class="icon">🎫</div>
+    <p>No bookings found. <a href="/bookings/new" style="color:var(--accent)">Create one →</a></p>
+  </div>
+</div>
+</body>
+</html>
