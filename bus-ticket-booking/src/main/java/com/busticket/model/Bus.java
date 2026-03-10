@@ -14,7 +14,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "buses")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bus {
@@ -74,7 +73,7 @@ public class Bus {
         }
     }
 
-    // Explicit getters/setters (to avoid IDE/Lombok issues)
+    
     public Long getBusId() {
         return busId;
     }

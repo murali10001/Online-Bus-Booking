@@ -4,14 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Booking {
@@ -20,7 +17,7 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bus_id", nullable = false)
     private Bus bus;
 
@@ -57,77 +54,77 @@ public class Booking {
             this.bookingDate = LocalDateTime.now();
         }
     }
-
-    // Explicit getters/setters (to avoid IDE/Lombok issues)
+    
     public Long getBookingId() {
-        return bookingId;
-    }
+		return bookingId;
+	}
 
-    public void setBookingId(Long bookingId) {
-        this.bookingId = bookingId;
-    }
+	public void setBookingId(Long bookingId) {
+		this.bookingId = bookingId;
+	}
 
-    public Bus getBus() {
-        return bus;
-    }
+	public Bus getBus() {
+		return bus;
+	}
 
-    public void setBus(Bus bus) {
-        this.bus = bus;
-    }
+	public void setBus(Bus bus) {
+		this.bus = bus;
+	}
 
-    public Passenger getPassenger() {
-        return passenger;
-    }
+	public Passenger getPassenger() {
+		return passenger;
+	}
 
-    public void setPassenger(Passenger passenger) {
-        this.passenger = passenger;
-    }
+	public void setPassenger(Passenger passenger) {
+		this.passenger = passenger;
+	}
 
-    public Integer getNumberOfSeats() {
-        return numberOfSeats;
-    }
+	public Integer getNumberOfSeats() {
+		return numberOfSeats;
+	}
 
-    public void setNumberOfSeats(Integer numberOfSeats) {
-        this.numberOfSeats = numberOfSeats;
-    }
+	public void setNumberOfSeats(Integer numberOfSeats) {
+		this.numberOfSeats = numberOfSeats;
+	}
 
-    public Double getTotalFare() {
-        return totalFare;
-    }
+	public Double getTotalFare() {
+		return totalFare;
+	}
 
-    public void setTotalFare(Double totalFare) {
-        this.totalFare = totalFare;
-    }
+	public void setTotalFare(Double totalFare) {
+		this.totalFare = totalFare;
+	}
 
-    public String getBookingStatus() {
-        return bookingStatus;
-    }
+	public String getBookingStatus() {
+		return bookingStatus;
+	}
 
-    public void setBookingStatus(String bookingStatus) {
-        this.bookingStatus = bookingStatus;
-    }
+	public void setBookingStatus(String bookingStatus) {
+		this.bookingStatus = bookingStatus;
+	}
 
-    public LocalDateTime getBookingDate() {
-        return bookingDate;
-    }
+	public LocalDateTime getBookingDate() {
+		return bookingDate;
+	}
 
-    public void setBookingDate(LocalDateTime bookingDate) {
-        this.bookingDate = bookingDate;
-    }
+	public void setBookingDate(LocalDateTime bookingDate) {
+		this.bookingDate = bookingDate;
+	}
 
-    public String getJourneyDate() {
-        return journeyDate;
-    }
+	public String getJourneyDate() {
+		return journeyDate;
+	}
 
-    public void setJourneyDate(String journeyDate) {
-        this.journeyDate = journeyDate;
-    }
+	public void setJourneyDate(String journeyDate) {
+		this.journeyDate = journeyDate;
+	}
 
-    public String getPnrNumber() {
-        return pnrNumber;
-    }
+	public String getPnrNumber() {
+		return pnrNumber;
+	}
 
-    public void setPnrNumber(String pnrNumber) {
-        this.pnrNumber = pnrNumber;
-    }
+	public void setPnrNumber(String pnrNumber) {
+		this.pnrNumber = pnrNumber;
+	}
+
 }

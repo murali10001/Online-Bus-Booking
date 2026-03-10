@@ -14,7 +14,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "passengers")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Passenger {
@@ -53,7 +52,7 @@ public class Passenger {
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Booking> bookings = new ArrayList<>();
 
-    // Explicit getters/setters (to avoid IDE/Lombok issues)
+   
     public Long getPassengerId() {
         return passengerId;
     }
