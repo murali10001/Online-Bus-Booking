@@ -27,7 +27,6 @@ public class HomeController {
     @Autowired
     private BookingRepository bookingRepository;
 
-    // GET / — Dashboard
     @GetMapping("/")
     public String dashboard(Model model) {
         model.addAttribute("totalBuses",        busRepository.count());
@@ -36,7 +35,6 @@ public class HomeController {
         model.addAttribute("confirmedBookings", bookingRepository.findByBookingStatus("CONFIRMED").size());
         model.addAttribute("cancelledBookings", bookingRepository.findByBookingStatus("CANCELLED").size());
 
-        // Recent 10 bookings
         List<Booking> all = bookingRepository.findAll();
         int fromIdx = Math.max(0, all.size() - 10);
         model.addAttribute("recentBookings", all.subList(fromIdx, all.size()));
@@ -44,7 +42,6 @@ public class HomeController {
         return "index";
     }
 
-    // GET /search — Search page with @RequestParam
     @GetMapping("/search")
     public String searchPage(
             @RequestParam(required = false) String source,

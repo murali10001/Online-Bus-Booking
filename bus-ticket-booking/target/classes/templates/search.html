@@ -27,7 +27,6 @@
     <h2>Find a Bus</h2>
   </div>
 
-  <!-- Search Form — params passed via @RequestParam -->
   <div class="search-bar">
     <form method="get" action="/search">
       <div class="form-group">
@@ -49,7 +48,6 @@
     </form>
   </div>
 
-  <!-- Results -->
   <div th:if="${searched}">
     <div th:if="${buses != null and !buses.isEmpty()}">
       <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;"

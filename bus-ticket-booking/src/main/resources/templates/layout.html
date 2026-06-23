@@ -15,7 +15,7 @@
       BusRoute
     </a>
     <nav class="nav">
-      <a th:href="@{/}" th:classappend="${activePage=='home'   ? 'active' : ''}">Dashboard</a>
+      <a th:href="@{/}" th:classappend="${activePage=='home'   ? 'active' : 'NUN'}">Dashboard</a>
       <a th:href="@{/buses}" th:classappend="${activePage=='buses'  ? 'active' : ''}">Buses</a>
       <a th:href="@{/passengers}" th:classappend="${activePage=='passengers' ? 'active' : ''}">Passengers</a>
       <a th:href="@{/bookings}" th:classappend="${activePage=='bookings' ? 'active' : ''}">Bookings</a>
@@ -25,7 +25,6 @@
 </header>
 
 <div class="wrapper">
-  <!-- Page content injected here -->
   <div th:replace="${content}"></div>
 </div>
 

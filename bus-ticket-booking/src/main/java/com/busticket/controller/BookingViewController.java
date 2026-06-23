@@ -32,8 +32,7 @@ public class BookingViewController {
         return "bookings/list";
     }
 
-    // GET /bookings/new — show booking form
-    // Optional @RequestParam busId to pre-select bus
+    
     @GetMapping("/new")
     public String newBookingForm(@RequestParam(required = false) Long busId, Model model) {
         model.addAttribute("buses", busService.getActiveBuses());
@@ -42,8 +41,7 @@ public class BookingViewController {
         return "bookings/form";
     }
 
-    // POST /bookings/book
-    // All parameters from the HTML form via @RequestParam
+    
     @PostMapping("/book")
     public String bookTicket(
             @RequestParam Long busId,
@@ -61,14 +59,12 @@ public class BookingViewController {
         }
     }
 
-    // GET /bookings/{id} — booking detail / confirmation
     @GetMapping("/{id}")
     public String viewBooking(@PathVariable Long id, Model model) {
         model.addAttribute("booking", bookingService.getBookingById(id));
         return "bookings/detail";
     }
 
-    // GET /bookings/pnr-search?pnr=XXX — search by PNR via @RequestParam
     @GetMapping("/pnr-search")
     public String searchByPnr(@RequestParam String pnr, Model model, RedirectAttributes ra) {
         try {
@@ -80,7 +76,6 @@ public class BookingViewController {
         }
     }
 
-    // POST /bookings/{id}/cancel — cancel booking
     @PostMapping("/{id}/cancel")
     public String cancelBooking(@PathVariable Long id, RedirectAttributes ra) {
         try {
@@ -92,7 +87,6 @@ public class BookingViewController {
         return "redirect:/bookings/" + id;
     }
 
-    // POST /bookings/pnr/{pnrNumber}/cancel
     @PostMapping("/pnr/{pnrNumber}/cancel")
     public String cancelByPnr(@PathVariable String pnrNumber, RedirectAttributes ra) {
         try {
